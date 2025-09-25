@@ -111,8 +111,8 @@ git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky lu
 git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openlist2 openlist2
 git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
 
-# sbwml/luci-theme-argon
-#git_sparse_clone openwrt-24.10 https://github.com/sbwml/luci-theme-argon luci-theme-argon luci-app-argon-config
+# Jaykwok2999/istoreos-theme
+#git_sparse_clone main https://github.com/Jaykwok2999/istoreos-theme luci-theme-argon luci-app-argon-config
 
 # sbwml/openwrt_pkgs
 git_sparse_clone main https://github.com/sbwml/openwrt_pkgs luci-app-ramfree
