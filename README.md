@@ -42,5 +42,5 @@
 # 🙏Thanks
 - [istoreos](https://github.com/istoreos/istoreos)
 - [linux-6.6.y](https://github.com/unifreq/linux-6.6.y)
-- [package](https://github.com/Kwonelee/package)
+- [istoreos_pkgs](https://github.com/Kwonelee/istoreos_pkgs.git)
 - [Actions-iStoreOS-RK35XX-24.10](https://github.com/xiaomeng9597/Actions-iStoreOS-RK35XX-24.10)
