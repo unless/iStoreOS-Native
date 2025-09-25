@@ -1,4 +1,4 @@
-# iStoreOS-NDK
+# iStoreOS-Native
 
 # 🤔Introduce
 > **🔈 本项目旨在将 RK3399 平台适配至 iStoreOS 官方源码，并通过原生编译构建 `sysupgrade` 格式固件**
