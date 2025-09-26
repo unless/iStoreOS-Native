@@ -98,9 +98,13 @@ function git_sparse_clone() {
   cd .. && rm -rf $repodir
 }
 
-# 更新golang
+# golang
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+
+# node
+rm -rf feeds/packages/lang/node
+git clone https://github.com/sbwml/feeds_packages_lang_node-prebuilt feeds/packages/lang/node -b packages-24.10
 
 # 常见插件
 git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclash
