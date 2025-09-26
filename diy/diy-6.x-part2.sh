@@ -78,9 +78,6 @@ wget -qO- https://raw.githubusercontent.com/Kwonelee/Kwonelee/refs/heads/main/ru
 rm -rf feeds/packages/net/adguardhome
 rm -rf feeds/third_party/luci-app-LingTiGameAcc
 rm -rf feeds/luci/applications/luci-app-filebrowser
-# istoreos-theme
-#rm -rf feeds/third/luci-theme-argon
-#rm -rf feeds/third/luci-app-argon-config
 
 # Set Rust build arg llvm.download-ci-llvm to false.
 RUST_MAKEFILE="feeds/packages/lang/rust/Makefile"
@@ -111,9 +108,5 @@ git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky lu
 git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openlist2 openlist2
 git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
 
-# Jaykwok2999/istoreos-theme
-#git_sparse_clone main https://github.com/Jaykwok2999/istoreos-theme luci-theme-argon luci-app-argon-config
-
 # sbwml/openwrt_pkgs
-git_sparse_clone main https://github.com/sbwml/openwrt_pkgs luci-app-ramfree
-git_sparse_clone main https://github.com/Kwonelee/istoreos_pkgs luci-app-filebrowser-go filebrowser
+git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
