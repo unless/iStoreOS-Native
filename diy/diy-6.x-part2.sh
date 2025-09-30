@@ -23,8 +23,6 @@ echo -e "\\ndefine Device/tvi_tvi3315a
 endef
 TARGET_DEVICES += tvi_tvi3315a" >> target/linux/rockchip/image/armv8.mk
 
-# 替换package/boot/uboot-rockchip/Makefile
-cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/Makefile package/boot/uboot-rockchip/Makefile
 
 # 复制dts与配置文件到package/boot/uboot-rockchip
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3399/{rk3399.dtsi,rk3399-opp.dtsi,rk3399-tvi3315a.dts} package/boot/uboot-rockchip/src/arch/arm/dts/
@@ -33,9 +31,11 @@ cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/tvi3315a-rk3399_defconfig pac
 
 # 复制dts到files/arch/arm64/boot/dts/rockchip
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3399/{rk3399.dtsi,rk3399-opp.dtsi,rk3399-tvi3315a.dts} target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
+cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
 
 # 添加dtb补丁到target/linux/rockchip/patches-6.6
 cp -f $GITHUB_WORKSPACE/configfiles/patch/800-add-rk3399-tvi3315a-dtb-to-makefile.patch target/linux/rockchip/patches-6.6/
+
 # ================================================================
 # RK3399示例结束
 # ================================================================
@@ -43,6 +43,29 @@ cp -f $GITHUB_WORKSPACE/configfiles/patch/800-add-rk3399-tvi3315a-dtb-to-makefil
 # ================================================================
 # 移植RK3566示例，其他RK35xx可模仿
 # ================================================================
+
+# 增加beikeyun设备
+echo -e "\\ndefine Device/beikeyun
+  DEVICE_VENDOR := Beike
+  DEVICE_MODEL := BeikeYun
+  SOC := rk3328
+  UBOOT_DEVICE_NAME := beikeyun-rk3328
+  SUPPORTED_DEVICES := beikeyun
+endef
+TARGET_DEVICES += beikeyun" >> target/linux/rockchip/image/armv8.mk
+
+# 替换package/boot/uboot-rockchip/Makefile
+cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/Makefile package/boot/uboot-rockchip/Makefile
+
+# 复制dts与配置文件到package/boot/uboot-rockchip
+cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} package/boot/uboot-rockchip/src/arch/arm/dts/
+cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/rk3328-beikeyun-u-boot.dtsi package/boot/uboot-rockchip/src/arch/arm/dts/
+cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/beikeyun-rk3328_defconfig package/boot/uboot-rockchip/src/configs/
+
+# 添加dtb补丁到target/linux/rockchip/patches-6.6
+
+cp -f $GITHUB_WORKSPACE/configfiles/patch/801-add-rk3328-beikeyun-dtb-to-makefile.patch target/linux/rockchip/patches-6.6/
+
 # 增加jp-tvbox设备
 echo -e "\\ndefine Device/jp_jp-tvbox
 \$(call Device/Legacy/rk3566,\$(1))
