@@ -22,7 +22,8 @@ echo -e "\\ndefine Device/tvi_tvi3315a
   UBOOT_DEVICE_NAME := tvi3315a-rk3399
 endef
 TARGET_DEVICES += tvi_tvi3315a" >> target/linux/rockchip/image/armv8.mk
-
+# 替换package/boot/uboot-rockchip/Makefile
+cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/Makefile package/boot/uboot-rockchip/Makefile
 
 # 复制dts与配置文件到package/boot/uboot-rockchip
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3399/{rk3399.dtsi,rk3399-opp.dtsi,rk3399-tvi3315a.dts} package/boot/uboot-rockchip/src/arch/arm/dts/
@@ -54,13 +55,14 @@ echo -e "\\ndefine Device/beikeyun
 endef
 TARGET_DEVICES += beikeyun" >> target/linux/rockchip/image/armv8.mk
 
-# 替换package/boot/uboot-rockchip/Makefile
-cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/Makefile package/boot/uboot-rockchip/Makefile
 
 # 复制dts与配置文件到package/boot/uboot-rockchip
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} package/boot/uboot-rockchip/src/arch/arm/dts/
 cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/rk3328-beikeyun-u-boot.dtsi package/boot/uboot-rockchip/src/arch/arm/dts/
 cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/beikeyun-rk3328_defconfig package/boot/uboot-rockchip/src/configs/
+
+# 复制dts到files/arch/arm64/boot/dts/rockchip
+cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
 
 # 添加dtb补丁到target/linux/rockchip/patches-6.6
 
