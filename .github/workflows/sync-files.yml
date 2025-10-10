@@ -40,6 +40,9 @@ jobs:
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_e24c=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_e24c is not set/' ./armv8/.config
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_e52c=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_e52c is not set/' ./armv8/.config
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_e54c=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_e54c is not set/' ./armv8/.config
+           sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_rock-4c-plus=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_rock-4c-plus is not set/' ./armv8/.config
+           sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_rock-4se=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_radxa_rock-4se is not set/' ./armv8/.config
+           
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_roceos_k60pro=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_roceos_k60pro is not set/' ./armv8/.config
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_xunlong_orangepi-5-plus=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_xunlong_orangepi-5-plus is not set/' ./armv8/.config
            
