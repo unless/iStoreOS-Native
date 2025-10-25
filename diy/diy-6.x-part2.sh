@@ -57,6 +57,7 @@ TARGET_DEVICES += beikeyun-p1" >> target/linux/rockchip/image/legacy.mk
 
 # 复制dts与配置文件到package/boot/uboot-rockchip
 #cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} package/boot/uboot-rockchip/src/arch/arm/dts/
+mkdir -p package/boot/uboot-rockchip/src/arch/arm/dts/
 cp -f $GITHUB_WORKSPACE/configfiles/ubootimage/beikeyun-p1-rk3328-u-boot-rockchip.bin staging_dir/target-aarch64_generic_musl/image/beikeyun-p1-rk3328-u-boot-rockchip.bin
 
 # 复制dts到files/arch/arm64/boot/dts/rockchip
