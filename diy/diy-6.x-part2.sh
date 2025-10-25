@@ -32,7 +32,6 @@ cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/tvi3315a-rk3399_defconfig pac
 
 # 复制dts到files/arch/arm64/boot/dts/rockchip
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3399/{rk3399.dtsi,rk3399-opp.dtsi,rk3399-tvi3315a.dts} target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
-cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
 
 # 添加dtb补丁到target/linux/rockchip/patches-6.6
 cp -f $GITHUB_WORKSPACE/configfiles/patch/800-add-rk3399-tvi3315a-dtb-to-makefile.patch target/linux/rockchip/patches-6.6/
@@ -54,17 +53,13 @@ $(call Device/Legacy/rk3328,$(1))
 endef
 TARGET_DEVICES += beikeyun-p1" >> target/linux/rockchip/image/legacy.mk
 
-
-# 复制dts与配置文件到package/boot/uboot-rockchip
-#cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun.dts} package/boot/uboot-rockchip/src/arch/arm/dts/
-mkdir -p package/boot/uboot-rockchip/src/arch/arm/dts/
-cp -f $GITHUB_WORKSPACE/configfiles/ubootimage/beikeyun-p1-rk3328-u-boot-rockchip.bin staging_dir/target-aarch64_generic_musl/image/beikeyun-p1-rk3328-u-boot-rockchip.bin
-
 # 复制dts到files/arch/arm64/boot/dts/rockchip
-cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun-p1.dts} target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
+cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun-p1.dts,beikeyun-p1-rk3328-u-boot-rockchip.bin} target/linux/rockchip/dts/rk3328/
 
-# 添加dtb补丁到target/linux/rockchip/patches-6.6
-
+sed -i '/^define Build\/Compile$/a\
+\tif echo "$(PROFILE)" | grep -q "beikeyun-p1"; then \\\
+\t\tcp -f ../dts/rk3328/beikeyun-p1-rk3328-u-boot-rockchip.bin $(STAGING_DIR_IMAGE)/beikeyun-p1-rk3328-u-boot-rockchip.bin; \\\
+\tfi' target/linux/rockchip/image/Makefile
 
 # 增加jp-tvbox设备
 echo -e "\\ndefine Device/jp_jp-tvbox
