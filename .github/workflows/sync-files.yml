@@ -24,7 +24,6 @@ jobs:
            content=$(cat ${GITHUB_WORKSPACE}/configfiles/config_data-6.x.txt)
            configdata=$(echo "$content" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
            # ------------禁用非必要软件包，由AI生成------------
-           CONFIG_TARGET_MULTI_PROFILE=y
            sed -i 's/^CONFIG_TARGET_MULTI_PROFILE=y/# CONFIG_TARGET_MULTI_PROFILE is not set/' ./armv8/.config
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_cyber_cyber3588-aib=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_cyber_cyber3588-aib is not set/' ./armv8/.config
            sed -i 's/^CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y/# CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s is not set/' ./armv8/.config
