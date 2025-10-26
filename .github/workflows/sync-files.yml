@@ -60,7 +60,6 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_comgt-directip=y/# CONFIG_PACKAGE_comgt-directip is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_comgt-ncm=y/# CONFIG_PACKAGE_comgt-ncm is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_ddns-scripts-dnspod=y/# CONFIG_PACKAGE_ddns-scripts-dnspod is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_ddns-scripts-services=y/# CONFIG_PACKAGE_ddns-scripts-services is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_ddns-scripts_aliyun=y/# CONFIG_PACKAGE_ddns-scripts_aliyun is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_ddnsto=y/# CONFIG_PACKAGE_ddnsto is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_kmod-fs-hfs=y/# CONFIG_PACKAGE_kmod-fs-hfs is not set/' ./armv8/.config
