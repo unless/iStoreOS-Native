@@ -69,7 +69,7 @@ echo -e "\\ndefine Device/beikeyun-p1
   UBOOT_IMAGE := beikeyun-p1-rk3328-u-boot-rockchip.bin
 endef
 TARGET_DEVICES += beikeyun-p1" >> target/linux/rockchip/image/legacy.mk
-
+cat target/linux/rockchip/image/legacy.mk
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun-p1.dts,beikeyun-p1-rk3328-u-boot-rockchip.bin} target/linux/rockchip/dts/rk3328/
 ls target/linux/rockchip/dts/rk3328/
 
