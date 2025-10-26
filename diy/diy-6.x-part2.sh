@@ -66,10 +66,10 @@ $(call Device/Legacy/rk3328,$(1))
   DEVICE_VENDOR := beikeyun
   DEVICE_MODEL := p1
   DEVICE_DTS := rk3328/rk3328-beikeyun-p1
+  UBOOT_IMAGE := beikeyun-p1-rk3328-u-boot-rockchip.bin
 endef
 TARGET_DEVICES += beikeyun-p1" >> target/linux/rockchip/image/legacy.mk
 
-# 复制dts到files/arch/arm64/boot/dts/rockchip
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun-p1.dts,beikeyun-p1-rk3328-u-boot-rockchip.bin} target/linux/rockchip/dts/rk3328/
 
 sed -i '/^define Build\/Compile$/a\
