@@ -51,8 +51,6 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_comgt=y/# CONFIG_PACKAGE_comgt is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_comgt-directip=y/# CONFIG_PACKAGE_comgt-directip is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_comgt-ncm=y/# CONFIG_PACKAGE_comgt-ncm is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_ddns-scripts=y/# CONFIG_PACKAGE_ddns-scripts is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_ddns-scripts-cloudflare=y/# CONFIG_PACKAGE_ddns-scripts-cloudflare is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_ddns-scripts-dnspod=y/# CONFIG_PACKAGE_ddns-scripts-dnspod is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_ddns-scripts-services=y/# CONFIG_PACKAGE_ddns-scripts-services is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_ddns-scripts_aliyun=y/# CONFIG_PACKAGE_ddns-scripts_aliyun is not set/' ./armv8/.config
@@ -68,11 +66,9 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_kmod-usb-net-huawei-cdc-ncm=y/# CONFIG_PACKAGE_kmod-usb-net-huawei-cdc-ncm is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_kmod-usb-net-qmi-wwan=y/# CONFIG_PACKAGE_kmod-usb-net-qmi-wwan is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_kmod-usb-serial-option=y/# CONFIG_PACKAGE_kmod-usb-serial-option is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_kmod-wireguard=y/# CONFIG_PACKAGE_kmod-wireguard is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_kmod-wwan=y/# CONFIG_PACKAGE_kmod-wwan is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_linkease=y/# CONFIG_PACKAGE_linkease is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_linkmount=y/# CONFIG_PACKAGE_linkmount is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-app-ddns=y/# CONFIG_PACKAGE_luci-app-ddns is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-ddnsto=y/# CONFIG_PACKAGE_luci-app-ddnsto is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-filetransfer=y/# CONFIG_PACKAGE_luci-app-filetransfer is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-linkease=y/# CONFIG_PACKAGE_luci-app-linkease is not set/' ./armv8/.config
@@ -81,14 +77,7 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_luci-app-ota=y/# CONFIG_PACKAGE_luci-app-ota is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-unet=y/# CONFIG_PACKAGE_luci-app-unet is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-lib-fs=y/# CONFIG_PACKAGE_luci-lib-fs is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-3g=y/# CONFIG_PACKAGE_luci-proto-3g is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-mbim=y/# CONFIG_PACKAGE_luci-proto-mbim is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-modemmanager=y/# CONFIG_PACKAGE_luci-proto-modemmanager is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-ncm=y/# CONFIG_PACKAGE_luci-proto-ncm is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-qmi=y/# CONFIG_PACKAGE_luci-proto-qmi is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-sstp=y/# CONFIG_PACKAGE_luci-proto-sstp is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-unet=y/# CONFIG_PACKAGE_luci-proto-unet is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-proto-wireguard=y/# CONFIG_PACKAGE_luci-proto-wireguard is not set/' ./armv8/.config
+
            sed -i 's/^CONFIG_PACKAGE_mergerfs=y/# CONFIG_PACKAGE_mergerfs is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_modemmanager=y/# CONFIG_PACKAGE_modemmanager is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_qmi-utils=y/# CONFIG_PACKAGE_qmi-utils is not set/' ./armv8/.config
@@ -98,10 +87,8 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_unet-cli=y/# CONFIG_PACKAGE_unet-cli is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_unetd=y/# CONFIG_PACKAGE_unetd is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_uqmi=y/# CONFIG_PACKAGE_uqmi is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_wireguard-tools=y/# CONFIG_PACKAGE_wireguard-tools is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_wwan=y/# CONFIG_PACKAGE_wwan is not set/' ./armv8/.config
            
-           sed -i 's/^CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=y/# CONFIG_PACKAGE_luci-i18n-ddns-zh-cn is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-i18n-ddnsto-zh-cn=y/# CONFIG_PACKAGE_luci-i18n-ddnsto-zh-cn is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-i18n-filetransfer-zh-cn=y/# CONFIG_PACKAGE_luci-i18n-filetransfer-zh-cn is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-i18n-linkease-zh-cn=y/# CONFIG_PACKAGE_luci-i18n-linkease-zh-cn is not set/' ./armv8/.config
