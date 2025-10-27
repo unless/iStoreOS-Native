@@ -130,6 +130,7 @@ git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclas
 git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openlist2 openlist2
 git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
-
+git clone -b master https://github.com/QiuSimons/luci-app-daed package/luci-app-daed
+git clone -b master https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 # sbwml/openwrt_pkgs
 git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
