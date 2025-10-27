@@ -62,7 +62,7 @@ cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3568/rk3566-jp-tvbox.dts target/linux/
 
 # 增加beikeyun设备
 echo -e "\\ndefine Device/beikeyun-p1
-\$(call Device/Legacy/rk3328,$(1))
+\$(call Device/Legacy/rk3328,\$(1))
   DEVICE_VENDOR := beikeyun
   DEVICE_MODEL := p1
   DEVICE_DTS := rk3328/rk3328-beikeyun-p1
