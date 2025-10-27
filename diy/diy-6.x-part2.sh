@@ -132,5 +132,6 @@ git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openl
 git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
 git clone -b master https://github.com/QiuSimons/luci-app-daed package/luci-app-daed
 git clone -b master https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
+sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 # sbwml/openwrt_pkgs
 git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
