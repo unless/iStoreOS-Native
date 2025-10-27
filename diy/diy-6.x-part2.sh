@@ -79,7 +79,7 @@ sed -i '/^define Build\/Compile$/a\
 \t\tmkdir -p $(STAGING_DIR_IMAGE); \\\
 \t\tcp -f ../dts/rk3328/beikeyun-p1-rk3328-u-boot-rockchip.bin $(STAGING_DIR_IMAGE)/beikeyun-p1-rk3328-u-boot-rockchip.bin; \\\
 \tfi' target/linux/rockchip/image/Makefile
-cat target/linux/rockchip/image/Makefile
+# cat target/linux/rockchip/image/Makefile
 # ================================================================
 # DIY编译⬇⬇⬇
 # ================================================================
@@ -132,7 +132,7 @@ git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openl
 git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
 git clone -b master https://github.com/QiuSimons/luci-app-daed package/luci-app-daed
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
-clang -v
+clang --version
 git clone -b master https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 # sbwml/openwrt_pkgs
