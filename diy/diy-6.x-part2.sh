@@ -133,7 +133,7 @@ git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luc
 git clone -b master https://github.com/QiuSimons/luci-app-daed package/luci-app-daed
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
 clang --version
-git clone -b master https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
+git clone -b main https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 # sbwml/openwrt_pkgs
 git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
