@@ -69,9 +69,9 @@ echo -e "\\ndefine Device/beikeyun-p1
   UBOOT_IMAGE := beikeyun-p1-rk3328-u-boot-rockchip.bin
 endef
 TARGET_DEVICES += beikeyun-p1" >> target/linux/rockchip/image/legacy.mk
-cat target/linux/rockchip/image/legacy.mk
+# cat target/linux/rockchip/image/legacy.mk
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun-p1.dts,beikeyun-p1-rk3328-u-boot-rockchip.bin} target/linux/rockchip/dts/rk3328/
-ls target/linux/rockchip/dts/rk3328/
+# ls target/linux/rockchip/dts/rk3328/
 
 
 sed -i '/^define Build\/Compile$/a\
@@ -132,8 +132,7 @@ git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openl
 git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
 git clone -b master https://github.com/QiuSimons/luci-app-daed package/luci-app-daed
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
-npm install -g pnpm
-
+clang -v
 git clone -b master https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 # sbwml/openwrt_pkgs
