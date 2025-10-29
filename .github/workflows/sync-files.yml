@@ -80,7 +80,7 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_luci-app-linkease=y/# CONFIG_PACKAGE_luci-app-linkease is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-mergerfs=y/# CONFIG_PACKAGE_luci-app-mergerfs is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-oaf=y/# CONFIG_PACKAGE_luci-app-oaf is not set/' ./armv8/.config
-           sed -i 's/^CONFIG_PACKAGE_luci-app-ota=y/# CONFIG_PACKAGE_luci-app-ota is not set/' ./armv8/.config
+           # sed -i 's/^CONFIG_PACKAGE_luci-app-ota=y/# CONFIG_PACKAGE_luci-app-ota is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-unet=y/# CONFIG_PACKAGE_luci-app-unet is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-lib-fs=y/# CONFIG_PACKAGE_luci-lib-fs is not set/' ./armv8/.config
 
