@@ -17,14 +17,15 @@ jobs:
 
       - name: Get remote version
         run: |
-          VERSION_LINE=$(curl -s https://fw0.koolcenter.com/iStoreOS/armsr/version.index | head -n1)
+          # 强制跟随跳转 (-L)，只取第一行，避免拿到 HTML
+          VERSION_LINE=$(curl -sL https://fw0.koolcenter.com/iStoreOS/armsr/version.index | head -n1)
           echo "REMOTE_VERSION=$VERSION_LINE" >> $GITHUB_ENV
           echo "Remote version: $VERSION_LINE"
 
       - name: Extract version and date
         run: |
-          VERSION=$(echo $REMOTE_VERSION | cut -d'-' -f1)
-          DATE=$(echo $REMOTE_VERSION | cut -d'-' -f2)
+          VERSION=$(echo "$REMOTE_VERSION" | cut -d'-' -f1)
+          DATE=$(echo "$REMOTE_VERSION" | cut -d'-' -f2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "DATE=$DATE" >> $GITHUB_ENV
           echo "Parsed VERSION=$VERSION, DATE=$DATE"
