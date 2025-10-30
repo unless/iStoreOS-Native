@@ -60,7 +60,7 @@ jobs:
         if: steps.check.outputs.new_version == 'true'
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: build-istoreos-6.x.yml
+          workflow: testbuild-istoreos-6.x.yml
           ref: main
           inputs: |
             {
