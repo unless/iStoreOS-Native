@@ -1,0 +1,63 @@
+name: Check iStoreOS Version
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # 每天 UTC 0 点执行（北京时间早上 8 点）
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Get remote version
+        run: |
+          VERSION_LINE=$(curl -s https://fw0.koolcenter.com/iStoreOS/armsr/version.index)
+          echo "REMOTE_VERSION=$VERSION_LINE" >> $GITHUB_ENV
+          echo "Remote version: $VERSION_LINE"
+
+      - name: Extract version and date
+        run: |
+          VERSION=$(echo $REMOTE_VERSION | cut -d'-' -f1)
+          DATE=$(echo $REMOTE_VERSION | cut -d'-' -f2)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "DATE=$DATE" >> $GITHUB_ENV
+          echo "Parsed VERSION=$VERSION, DATE=$DATE"
+
+      - name: Compare with last version
+        id: check
+        run: |
+          LAST_VERSION_FILE=".last_version"
+          if [ -f $LAST_VERSION_FILE ]; then
+            LAST_VERSION=$(cat $LAST_VERSION_FILE)
+          else
+            LAST_VERSION="none"
+          fi
+          echo "Last version: $LAST_VERSION"
+          if [ "$LAST_VERSION" != "$REMOTE_VERSION" ]; then
+            echo "new_version=true" >> $GITHUB_OUTPUT
+            echo $REMOTE_VERSION > $LAST_VERSION_FILE
+          else
+            echo "new_version=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit updated version file
+        if: steps.check.outputs.new_version == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .last_version
+          git commit -m "Update version to $REMOTE_VERSION"
+          git push
+
+      - name: Trigger build workflow
+        if: steps.check.outputs.new_version == 'true'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: build-istoreos-6.x.yml
+          ref: main
+          inputs: |
+            version=${{ env.VERSION }}
+            date=${{ env.DATE }}
