@@ -56,6 +56,3 @@ jobs:
           git commit -m "Update version to $REMOTE_VERSION"
           git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
 
-
-              "date": "${{ env.DATE }}"
-            }
