@@ -1,6 +1,7 @@
 name: Check iStoreOS Version
+
 permissions:
-  contents: write
+  contents: write   # 允许 GITHUB_TOKEN 写入仓库
 
 on:
   schedule:
@@ -16,7 +17,7 @@ jobs:
 
       - name: Get remote version
         run: |
-          VERSION_LINE=$(curl -s https://fw0.koolcenter.com/iStoreOS/armsr/version.index)
+          VERSION_LINE=$(curl -s https://fw0.koolcenter.com/iStoreOS/armsr/version.index | head -n1)
           echo "REMOTE_VERSION=$VERSION_LINE" >> $GITHUB_ENV
           echo "Remote version: $VERSION_LINE"
 
@@ -54,13 +55,14 @@ jobs:
           git commit -m "Update version to $REMOTE_VERSION"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
 
-
       - name: Trigger build workflow
         if: steps.check.outputs.new_version == 'true'
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: testbuild-istoreos-6.x.yml
+          workflow: build-istoreos-6.x.yml
           ref: main
           inputs: |
-            version=${{ env.VERSION }}
-            date=${{ env.DATE }}
+            {
+              "version": "${{ env.VERSION }}",
+              "date": "${{ env.DATE }}"
+            }
