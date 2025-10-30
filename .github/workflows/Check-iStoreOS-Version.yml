@@ -56,14 +56,6 @@ jobs:
           git commit -m "Update version to $REMOTE_VERSION"
           git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
 
-      - name: Trigger build workflow
-        if: steps.check.outputs.new_version == 'true'
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: testbuild-istoreos-6.x.yml
-          ref: main
-          inputs: |
-            {
-              "version": "${{ env.VERSION }}",
+
               "date": "${{ env.DATE }}"
             }
