@@ -73,7 +73,7 @@ TARGET_DEVICES += beikeyun-p1" >> target/linux/rockchip/image/legacy.mk
 cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3328/{rk3328.dtsi,rk3328-beikeyun-p1.dts,beikeyun-p1-rk3328-u-boot-rockchip.bin} target/linux/rockchip/dts/rk3328/
 # ls target/linux/rockchip/dts/rk3328/
 
-
+sed -i "/radxa,e20c|\\\\$/a\\$(printf '\t')beikeyun-p1|\\\\" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
 sed -i '/^define Build\/Compile$/a\
 \tif echo "$(PROFILE)" | grep -q "beikeyun-p1"; then \\\
 \t\tmkdir -p $(STAGING_DIR_IMAGE); \\\
