@@ -48,9 +48,9 @@ jobs:
           -d '{"ref":"main"}'
         echo "已触发sync-files工作流"
         
-        # 等待2分钟后触发testbuild工作流
-        echo "等待2分钟..."
-        sleep 120
+        # 等待1分钟后触发testbuild工作流
+        echo "等待1分钟..."
+        sleep 60
         
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
