@@ -26,19 +26,68 @@ jobs:
           cp current_version.txt last_version.txt
         fi
 
-    - name: Trigger build if changed
+name: Check iStoreOS Version
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC时间00:00运行
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get current version
+      run: |
+        curl -s "https://fw21.koolcenter.com:60010/iStoreOS/armsr/version.index" > current_version.txt
+        echo "版本号: $(cat current_version.txt)"
+
+    - name: Compare versions
+      id: compare
+      run: |
+        if [ -f last_version.txt ] && [ "$(cat current_version.txt)" = "$(cat last_version.txt)" ]; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          cp current_version.txt last_version.txt
+        fi
+
+    - name: Save new version
       if: steps.compare.outputs.changed == 'true'
       run: |
-        # 保存新版本并提交
         git config user.email "action@github.com"
         git config user.name "GitHub Action"
         git add last_version.txt
         git commit -m "Update to version $(cat current_version.txt)"
         git push
-        
-        # 触发构建工作流
+
+    - name: Trigger sync-files workflow
+      if: steps.compare.outputs.changed == 'true'
+      run: |
+        # 触发sync-files工作流
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/dispatches \
-          -d '{"event_type": "trigger_build", "client_payload": {"version": "'$(cat current_version.txt)'"}}'
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/sync-files.yml/dispatches \
+          -d '{"ref":"main"}'
+        echo "已触发sync-files工作流"
+
+    - name: Wait 2 minutes
+      if: steps.compare.outputs.changed == 'true'
+      run: |
+        echo "等待2分钟..."
+        sleep 120
+        echo "等待完成"
+
+    - name: Trigger testbuild workflow
+      if: steps.compare.outputs.changed == 'true'
+      run: |
+        # 触发testbuild工作流
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/testbuild-istoreos-6.x.yml/dispatches \
+          -d '{"ref":"main"}'
+        echo "已触发testbuild-istoreos-6.x工作流"
