@@ -1,7 +1,7 @@
 name: Check iStoreOS Version
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天UTC时间00:00运行
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -13,39 +13,32 @@ jobs:
 
     - name: Get current version
       run: |
-        # 获取最新版本号
         curl -s "https://fw21.koolcenter.com:60010/iStoreOS/armsr/version.index" > current_version.txt
-        echo "Current version: $(cat current_version.txt)"
+        echo "版本号: $(cat current_version.txt)"
 
     - name: Compare versions
       id: compare
       run: |
-        # 检查版本是否变化
         if [ -f last_version.txt ] && [ "$(cat current_version.txt)" = "$(cat last_version.txt)" ]; then
-          echo "Version unchanged"
           echo "changed=false" >> $GITHUB_OUTPUT
         else
-          echo "Version changed from $(cat last_version.txt 2>/dev/null || echo 'none') to $(cat current_version.txt)"
           echo "changed=true" >> $GITHUB_OUTPUT
           cp current_version.txt last_version.txt
         fi
 
-    - name: Save new version and trigger build
+    - name: Trigger build if changed
       if: steps.compare.outputs.changed == 'true'
       run: |
+        # 保存新版本并提交
         git config user.email "action@github.com"
         git config user.name "GitHub Action"
         git add last_version.txt
         git commit -m "Update to version $(cat current_version.txt)"
         git push
-        echo "触发构建工作流..."
-
-    - name: Trigger workflow
-      if: steps.compare.outputs.changed == 'true'
-      run: |
-        # 触发另一个工作流
+        
+        # 触发构建工作流
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/actions/workflows/testbuild-istoreos-6.x.yml/dispatches \
-          -d '{"ref":"main"}'
+          https://api.github.com/repos/${{ github.repository }}/dispatches \
+          -d '{"event_type": "trigger_build", "client_payload": {"version": "'$(cat current_version.txt)'"}}'
