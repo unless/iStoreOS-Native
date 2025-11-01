@@ -1,4 +1,4 @@
-name: Build iStore OS for Beikeyun P1
+name: Build iStore OS 6.x
 
 on:
   repository_dispatch:
@@ -13,6 +13,7 @@ on:
 
 env:
   REPO_URL: https://github.com/istoreos/istoreos
+  # REPO_BRANCH: main
   FEEDS_CONF: feeds.conf
   CONFIG_FILE: .config
   DIY_P1_SH: diy/diy-6.x-part1.sh
@@ -25,11 +26,19 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         REPO_BRANCH:
+          # - main
           - istoreos-24.10
+          # - istoreos-23.05
+        ARCHITECTURE:
+          - armv8
+        os:
+          - ubuntu-22.04
+
+      fail-fast: false
 
     steps:
     - name: 合并磁盘
@@ -70,7 +79,7 @@ jobs:
         echo "------------------------------- 更新并安装依赖 -------------------------------"
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /etc/mysql /etc/php /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends/ubuntu-22.04)
+        sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends/${{ matrix.os }})
         wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
         sudo python3 get-pip.py
         sudo rm -rf get-pip.py
@@ -95,12 +104,12 @@ jobs:
       uses: klever1988/cachewrtbuild@main
       with:
         ccache: 'true'
-        mixkey: ubuntu-22.04-armv8-${{ matrix.REPO_BRANCH }}
+        mixkey: ${{ matrix.os }}-${{ matrix.ARCHITECTURE }}-${{ matrix.REPO_BRANCH }}
         prefix: ${{ github.workspace }}/openwrt
 
     - name: 加载自定义 feeds
       env:
-        FEEDS_CONF_PATH: armv8/${{ env.FEEDS_CONF }}
+        FEEDS_CONF_PATH: ${{ matrix.ARCHITECTURE }}/${{ env.FEEDS_CONF }}
       run: |
         [ -e $FEEDS_CONF_PATH ] && mv $FEEDS_CONF_PATH openwrt/$FEEDS_CONF
         chmod +x $DIY_P1_SH
@@ -115,7 +124,7 @@ jobs:
 
     - name: 加载自定义配置
       env:
-        CONFIG_FILE_PATH: armv8/${{ env.CONFIG_FILE }}
+        CONFIG_FILE_PATH: ${{ matrix.ARCHITECTURE }}/${{ env.CONFIG_FILE }}
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE_PATH ] && mv $CONFIG_FILE_PATH openwrt/$CONFIG_FILE
@@ -145,8 +154,7 @@ jobs:
         cd openwrt
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 || make -j1 V=s
-        # 设置构建时间戳，只使用年月日时
-        echo "BUILD_TIME=$(date +"%Y%m%d%H")" >> $GITHUB_ENV
+        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
         echo "status=success" >> ${GITHUB_OUTPUT}
 
     - name: 检查磁盘空间
@@ -157,7 +165,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: ${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-bin
+        name: OpenWrt_bin${{ env.FILE_DATE }}
         path: openwrt/bin
 
     - name: 整理固件文件
@@ -169,83 +177,35 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> ${GITHUB_OUTPUT}
 
-    - name: 重命名固件并生成 sha256
-      id: rename_firmware
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      run: |
-        cd ${{ env.FIRMWARE }}
-        for file in *beikeyun-p1-squashfs-sysupgrade.img.gz; do
-          if [ -f "$file" ]; then
-            new_name="${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-beikeyun-p1-squashfs-sysupgrade.img.gz"
-            mv "$file" "$new_name"
-            sha256sum "$new_name" > "$new_name.sha256sums"
-            echo "生成: $new_name 及 $new_name.sha256sums"
-            echo "NEW_FIRMWARE_NAME=$new_name" >> $GITHUB_ENV
-            echo "NEW_SHA256_FILE=$new_name.sha256sums" >> $GITHUB_ENV
-          fi
-        done
-        echo "status=success" >> ${GITHUB_OUTPUT}
-        
-    - name: 生成 manifest.json
-      id: gen_manifest
-      if: steps.rename_firmware.outputs.status == 'success' && !cancelled()
-      run: |
-        cd ${{ env.FIRMWARE }}
-        manifest_name="${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-beikeyun-p1-manifest.json"
-        cat > "$manifest_name" <<EOF
-        {
-          "version": "${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}",
-          "device": "beikeyun-p1",
-          "files": [
-            {
-              "name": "${{ env.NEW_FIRMWARE_NAME }}",
-              "url": "https://github.com/${{ github.repository }}/releases/download/istoreos-beikeyun-p1/${{ env.NEW_FIRMWARE_NAME }}",
-              "sha256": "$(sha256sum ${{ env.NEW_FIRMWARE_NAME }} | awk '{print $1}')"
-            }
-          ]
-        }
-        EOF
-        echo "生成 $manifest_name 完成"
-        echo "NEW_MANIFEST=$manifest_name" >> $GITHUB_ENV
-
-
     - name: 上传固件目录
       uses: actions/upload-artifact@main
-      if: steps.gen_manifest.outputs.status != 'cancelled'
+      if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: ${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-firmware
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.NEW_FIRMWARE_NAME }}
-          ${{ env.FIRMWARE }}/${{ env.NEW_SHA256_FILE }}
-          ${{ env.FIRMWARE }}/${{ env.NEW_MANIFEST }}
+        name: OpenWrt_firmware${{ env.FILE_DATE }}
+        path: ${{ env.FIRMWARE }}
 
-    - name: 生成发布信息
-      id: release_info
+    - name: 生成发布标签
+      id: tag
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        cat > release_body.txt <<EOF
-        🎯 设备: 贝壳云 P1 (Beikeyun P1)
-        🖥️ 架构: rockchip-armv8
-        🔀 源码分支: ${{ matrix.REPO_BRANCH }}
-        📂 源码仓库: ${{ env.REPO_URL }}
-        🕒 编译时间: $(date +"%Y年%m月%d日%H时")
-        ---
-        此固件专为贝壳云 P1 设备编译。
-        EOF
+        echo "release_tag=$(date +"%Y.%m.%d-%H.%M")-${{ matrix.ARCHITECTURE }}" >> ${GITHUB_OUTPUT}
+        touch release.txt
+        echo "
+        🖥️ Architecture: rockchip-${{ matrix.ARCHITECTURE }}
+
+        🔀 Branch: ${{ matrix.REPO_BRANCH }}
+
+        📂 Source Code: ${{ env.REPO_URL }}
+
+        🕒 Compilation Time: $(date +"%Y年%m月%d日%H时%M分") " >> release.txt
         echo "status=success" >> ${GITHUB_OUTPUT}
 
     - name: 自动发布固件到 Releases
       uses: softprops/action-gh-release@v2
-      if: steps.release_info.outputs.status == 'success' && !cancelled()
+      if: steps.tag.outputs.status == 'success' && !cancelled()
       with:
-        tag_name: "istoreos-beikeyun-p1"
-        release_name: "iStoreOS for Beikeyun P1"
-        body_path: release_body.txt
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        body_path: release.txt
         files: |
-          ${{ env.FIRMWARE }}/${{ env.NEW_FIRMWARE_NAME }}
-          ${{ env.FIRMWARE }}/${{ env.NEW_SHA256_FILE }}
-          ${{ env.FIRMWARE }}/${{ env.NEW_MANIFEST }}
-        overwrite: false
-        draft: false
-        prerelease: false
+          ${{ env.FIRMWARE }}/*beikeyun-p1-squashfs-sysupgrade.img.gz
 
