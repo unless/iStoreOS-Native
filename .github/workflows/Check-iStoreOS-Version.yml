@@ -1,58 +1,51 @@
 name: Check iStoreOS Version
-
-permissions:
-  contents: write   # 允许 GITHUB_TOKEN 写入仓库
-
 on:
   schedule:
-    - cron: '0 0 * * *'   # 每天 UTC 0 点执行（北京时间早上 8 点）
+    - cron: '0 0 * * *'  # 每天UTC时间00:00运行
   workflow_dispatch:
 
 jobs:
   check-version:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Get remote version
-        run: |
-          # 强制跟随跳转 (-L)，只取第一行，避免拿到 HTML
-          VERSION_LINE=$(curl -sL https://fw0.koolcenter.com/iStoreOS/armsr/version.index | head -n1)
-          echo "REMOTE_VERSION=$VERSION_LINE" >> $GITHUB_ENV
-          echo "Remote version: $VERSION_LINE"
+    - name: Get current version
+      run: |
+        # 获取最新版本号
+        curl -s "https://fw21.koolcenter.com:60010/iStoreOS/armsr/version.index" > current_version.txt
+        echo "Current version: $(cat current_version.txt)"
 
-      - name: Extract version and date
-        run: |
-          VERSION=$(echo "$REMOTE_VERSION" | cut -d'-' -f1)
-          DATE=$(echo "$REMOTE_VERSION" | cut -d'-' -f2)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "DATE=$DATE" >> $GITHUB_ENV
-          echo "Parsed VERSION=$VERSION, DATE=$DATE"
+    - name: Compare versions
+      id: compare
+      run: |
+        # 检查版本是否变化
+        if [ -f last_version.txt ] && [ "$(cat current_version.txt)" = "$(cat last_version.txt)" ]; then
+          echo "Version unchanged"
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "Version changed from $(cat last_version.txt 2>/dev/null || echo 'none') to $(cat current_version.txt)"
+          echo "changed=true" >> $GITHUB_OUTPUT
+          cp current_version.txt last_version.txt
+        fi
 
-      - name: Compare with last version
-        id: check
-        run: |
-          LAST_VERSION_FILE=".last_version"
-          if [ -f $LAST_VERSION_FILE ]; then
-            LAST_VERSION=$(cat $LAST_VERSION_FILE)
-          else
-            LAST_VERSION="none"
-          fi
-          echo "Last version: $LAST_VERSION"
-          if [ "$LAST_VERSION" != "$REMOTE_VERSION" ]; then
-            echo "new_version=true" >> $GITHUB_OUTPUT
-            echo $REMOTE_VERSION > $LAST_VERSION_FILE
-          else
-            echo "new_version=false" >> $GITHUB_OUTPUT
-          fi
+    - name: Save new version and trigger build
+      if: steps.compare.outputs.changed == 'true'
+      run: |
+        git config user.email "action@github.com"
+        git config user.name "GitHub Action"
+        git add last_version.txt
+        git commit -m "Update to version $(cat current_version.txt)"
+        git push
+        echo "触发构建工作流..."
 
-      - name: Commit updated version file
-        if: steps.check.outputs.new_version == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .last_version
-          git commit -m "Update version to $REMOTE_VERSION"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
-
+    - name: Trigger workflow
+      if: steps.compare.outputs.changed == 'true'
+      run: |
+        # 触发另一个工作流
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/testbuild-istoreos-6.x.yml/dispatches \
+          -d '{"ref":"main"}'
