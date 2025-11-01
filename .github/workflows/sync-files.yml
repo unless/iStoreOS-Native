@@ -1,4 +1,4 @@
-name: Sync Files
+name: ST2 Sync Files
 
 on:
   repository_dispatch:
