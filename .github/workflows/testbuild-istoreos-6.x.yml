@@ -185,15 +185,39 @@ jobs:
           fi
         done
         echo "status=success" >> ${GITHUB_OUTPUT}
+        
+    - name: 生成 manifest.json
+      id: gen_manifest
+      if: steps.rename_firmware.outputs.status == 'success' && !cancelled()
+      run: |
+        cd ${{ env.FIRMWARE }}
+        manifest_name="${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-beikeyun-p1-manifest.json"
+        cat > "$manifest_name" <<EOF
+        {
+          "version": "${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}",
+          "device": "beikeyun-p1",
+          "files": [
+            {
+              "name": "${{ env.NEW_FIRMWARE_NAME }}",
+              "url": "https://github.com/${{ github.repository }}/releases/download/istoreos-beikeyun-p1/${{ env.NEW_FIRMWARE_NAME }}",
+              "sha256": "$(sha256sum ${{ env.NEW_FIRMWARE_NAME }} | awk '{print $1}')"
+            }
+          ]
+        }
+        EOF
+        echo "生成 $manifest_name 完成"
+        echo "NEW_MANIFEST=$manifest_name" >> $GITHUB_ENV
+
 
     - name: 上传固件目录
       uses: actions/upload-artifact@main
-      if: steps.rename_firmware.outputs.status == 'success' && !cancelled()
+      if: steps.gen_manifest.outputs.status != 'cancelled'
       with:
         name: ${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-firmware
         path: |
           ${{ env.FIRMWARE }}/${{ env.NEW_FIRMWARE_NAME }}
           ${{ env.FIRMWARE }}/${{ env.NEW_SHA256_FILE }}
+          ${{ env.FIRMWARE }}/${{ env.NEW_MANIFEST }}
 
     - name: 生成发布信息
       id: release_info
@@ -201,15 +225,10 @@ jobs:
       run: |
         cat > release_body.txt <<EOF
         🎯 设备: 贝壳云 P1 (Beikeyun P1)
-
         🖥️ 架构: rockchip-armv8
-
         🔀 源码分支: ${{ matrix.REPO_BRANCH }}
-
         📂 源码仓库: ${{ env.REPO_URL }}
-
         🕒 编译时间: $(date +"%Y年%m月%d日%H时")
-
         ---
         此固件专为贝壳云 P1 设备编译。
         EOF
@@ -225,6 +244,7 @@ jobs:
         files: |
           ${{ env.FIRMWARE }}/${{ env.NEW_FIRMWARE_NAME }}
           ${{ env.FIRMWARE }}/${{ env.NEW_SHA256_FILE }}
+          ${{ env.FIRMWARE }}/${{ env.NEW_MANIFEST }}
         overwrite: false
         draft: false
         prerelease: false
