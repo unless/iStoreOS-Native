@@ -1,17 +1,17 @@
 name: testBuild iStore OS 6.x
 
 on:
-  push:
-    paths:
-      - '.last_version'
+  # 添加 workflow_dispatch 触发器，允许手动触发
   workflow_dispatch:
     inputs:
       version:
-        description: 'iStoreOS version'
+        description: 'iStoreOS版本号'
         required: false
-      date:
-        description: 'Build date'
-        required: false
+        default: 'auto'
+  
+  # 添加 repository_dispatch 触发器，允许通过API触发
+  repository_dispatch:
+    types: [trigger_build]
 
 env:
   REPO_URL: https://github.com/istoreos/istoreos
