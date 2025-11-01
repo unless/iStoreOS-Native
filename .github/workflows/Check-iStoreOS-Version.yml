@@ -27,7 +27,8 @@ jobs:
           echo "版本已变化: $(cat last_version.txt 2>/dev/null || echo '无') -> $current_version"
           echo "changed=true" >> $GITHUB_OUTPUT
           echo "$current_version" > last_version.txt
-          
+          curl -X POST -H "Content-Type: application/json" -d '{"text": "['"$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S")"'] 检测到新版本，下载编译: '"$current_version"'"}' "${{ secrets.WEBHOOK_URL }}"
+
           # 保存版本并提交
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
