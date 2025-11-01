@@ -1,4 +1,4 @@
-name: test Build iStore OS 6.x
+name: ST3 test Build iStore OS 6.x
 
 on:
   repository_dispatch:
