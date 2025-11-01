@@ -169,19 +169,19 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> ${GITHUB_OUTPUT}
 
-    - name: 重命名固件文件
+    - name: 重命名固件并生成 sha256
       id: rename_firmware
       if: steps.organize.outputs.status == 'success' && !cancelled()
       run: |
         cd ${{ env.FIRMWARE }}
-        # 重命名贝壳云固件文件
         for file in *beikeyun-p1-squashfs-sysupgrade.img.gz; do
           if [ -f "$file" ]; then
-            # 新的命名格式：REPO_BRANCH-年月日时-beikeyun-p1-squashfs-sysupgrade.img.gz
             new_name="${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-beikeyun-p1-squashfs-sysupgrade.img.gz"
-            cp "$file" "$new_name"
-            echo "重命名: $file -> $new_name"
+            mv "$file" "$new_name"
+            sha256sum "$new_name" > "$new_name.sha256sums"
+            echo "生成: $new_name 及 $new_name.sha256sums"
             echo "NEW_FIRMWARE_NAME=$new_name" >> $GITHUB_ENV
+            echo "NEW_SHA256_FILE=$new_name.sha256sums" >> $GITHUB_ENV
           fi
         done
         echo "status=success" >> ${GITHUB_OUTPUT}
@@ -191,16 +191,17 @@ jobs:
       if: steps.rename_firmware.outputs.status == 'success' && !cancelled()
       with:
         name: ${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-firmware
-        path: ${{ env.FIRMWARE }}/${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-beikeyun-p1-squashfs-sysupgrade.img.gz
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.NEW_FIRMWARE_NAME }}
+          ${{ env.FIRMWARE }}/${{ env.NEW_SHA256_FILE }}
 
     - name: 生成发布信息
       id: release_info
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        touch release_body.txt
-        echo "
+        cat > release_body.txt <<EOF
         🎯 设备: 贝壳云 P1 (Beikeyun P1)
-        
+
         🖥️ 架构: rockchip-armv8
 
         🔀 源码分支: ${{ matrix.REPO_BRANCH }}
@@ -211,20 +212,20 @@ jobs:
 
         ---
         此固件专为贝壳云 P1 设备编译。
-        " >> release_body.txt
+        EOF
         echo "status=success" >> ${GITHUB_OUTPUT}
 
     - name: 自动发布固件到 Releases
       uses: softprops/action-gh-release@v2
       if: steps.release_info.outputs.status == 'success' && !cancelled()
       with:
-        # 使用固定的标签，所有构建都发布到同一个Release
         tag_name: "istoreos-beikeyun-p1"
         release_name: "iStoreOS for Beikeyun P1"
         body_path: release_body.txt
         files: |
-          ${{ env.FIRMWARE }}/${{ matrix.REPO_BRANCH }}-${{ env.BUILD_TIME }}-beikeyun-p1-squashfs-sysupgrade.img.gz
-        # 设置为false，这样不会覆盖已存在的文件
+          ${{ env.FIRMWARE }}/${{ env.NEW_FIRMWARE_NAME }}
+          ${{ env.FIRMWARE }}/${{ env.NEW_SHA256_FILE }}
         overwrite: false
         draft: false
         prerelease: false
+
