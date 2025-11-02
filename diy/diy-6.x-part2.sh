@@ -8,8 +8,8 @@
 #===============================================
 
 # 集成设备无线
-mkdir -p package/base-files/files/lib/firmware/brcm
-cp -a $GITHUB_WORKSPACE/configfiles/firmware/brcm/* package/base-files/files/lib/firmware/brcm/
+# mkdir -p package/base-files/files/lib/firmware/brcm
+# cp -a $GITHUB_WORKSPACE/configfiles/firmware/brcm/* package/base-files/files/lib/firmware/brcm/
 
 # ================================================================
 # 移植RK3399示例，其他RK3399可模仿
@@ -21,7 +21,7 @@ cp -a $GITHUB_WORKSPACE/configfiles/firmware/brcm/* package/base-files/files/lib
 #  SOC := rk3399
 #  UBOOT_DEVICE_NAME := tvi3315a-rk3399
 # endef
-#TARGET_DEVICES += tvi_tvi3315a" >> target/linux/rockchip/image/armv8.mk
+# TARGET_DEVICES += tvi_tvi3315a" >> target/linux/rockchip/image/armv8.mk
 
 # 替换package/boot/uboot-rockchip/Makefile
 # cp -f $GITHUB_WORKSPACE/configfiles/uboot-rockchip/Makefile package/boot/uboot-rockchip/Makefile
@@ -94,46 +94,46 @@ sed -i '/^define Build\/Compile$/a\
 # wget -qO- https://raw.githubusercontent.com/Kwonelee/Kwonelee/refs/heads/main/rule/openclash > files/etc/config/openclash
 
 # 移除要替换的包
-rm -rf feeds/packages/net/adguardhome
-rm -rf feeds/third_party/luci-app-LingTiGameAcc
-rm -rf feeds/luci/applications/luci-app-filebrowser
+#rm -rf feeds/packages/net/adguardhome
+#rm -rf feeds/third_party/luci-app-LingTiGameAcc
+#rm -rf feeds/luci/applications/luci-app-filebrowser
 
 # Set Rust build arg llvm.download-ci-llvm to false.
-RUST_MAKEFILE="feeds/packages/lang/rust/Makefile"
-if [[ -f "${RUST_MAKEFILE}" ]]; then
-  printf "Modifying %s...\n" "${RUST_MAKEFILE}"
-  sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' "${RUST_MAKEFILE}"
-else
-  echo "File ${RUST_MAKEFILE} does not exist." >&2
-fi
+#RUST_MAKEFILE="feeds/packages/lang/rust/Makefile"
+#if [[ -f "${RUST_MAKEFILE}" ]]; then
+#  printf "Modifying %s...\n" "${RUST_MAKEFILE}"
+#  sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' "${RUST_MAKEFILE}"
+#else
+#  echo "File ${RUST_MAKEFILE} does not exist." >&2
+#fi
 
 # Git稀疏克隆，只克隆指定目录到本地
-function git_sparse_clone() {
-  branch="$1" repourl="$2" && shift 2
-  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
-  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
-  cd $repodir && git sparse-checkout set $@
-  mv -f $@ ../package
-  cd .. && rm -rf $repodir
-}
+#function git_sparse_clone() {
+#  branch="$1" repourl="$2" && shift 2
+#  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
+#  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
+#  cd $repodir && git sparse-checkout set $@
+#  mv -f $@ ../package
+#  cd .. && rm -rf $repodir
+#}
 
 # golang
-rm -rf feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+#rm -rf feeds/packages/lang/golang
+#git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
 
 # node
-rm -rf feeds/packages/lang/node
-git clone https://github.com/sbwml/feeds_packages_lang_node-prebuilt feeds/packages/lang/node -b packages-24.10
+#rm -rf feeds/packages/lang/node
+#git clone https://github.com/sbwml/feeds_packages_lang_node-prebuilt feeds/packages/lang/node -b packages-24.10
 
 # 常见插件
-git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclash
-git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
-git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openlist2 openlist2
-git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
+#git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclash
+#git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+#git_sparse_clone main https://github.com/sbwml/luci-app-openlist2 luci-app-openlist2 openlist2
+#git clone -b master https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome
 git clone -b master https://github.com/QiuSimons/luci-app-daed package/luci-app-daed
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
-clang --version
+#clang --version
 git clone -b main https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 # sbwml/openwrt_pkgs
-git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
+#git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
