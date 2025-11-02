@@ -96,7 +96,7 @@ sed -i '/^define Build\/Compile$/a\
 # 移除要替换的包
 #rm -rf feeds/packages/net/adguardhome
 #rm -rf feeds/third_party/luci-app-LingTiGameAcc
-#rm -rf feeds/luci/applications/luci-app-filebrowser
+rm -rf feeds/luci/applications/luci-app-filebrowser
 
 # Set Rust build arg llvm.download-ci-llvm to false.
 #RUST_MAKEFILE="feeds/packages/lang/rust/Makefile"
@@ -108,14 +108,14 @@ sed -i '/^define Build\/Compile$/a\
 #fi
 
 # Git稀疏克隆，只克隆指定目录到本地
-#function git_sparse_clone() {
-#  branch="$1" repourl="$2" && shift 2
-#  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
-#  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
-#  cd $repodir && git sparse-checkout set $@
-#  mv -f $@ ../package
-#  cd .. && rm -rf $repodir
-#}
+function git_sparse_clone() {
+  branch="$1" repourl="$2" && shift 2
+  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
+  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
+  cd $repodir && git sparse-checkout set $@
+  mv -f $@ ../package/new
+  cd .. && rm -rf $repodir
+}
 
 # golang
 #rm -rf feeds/packages/lang/golang
@@ -136,4 +136,4 @@ mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubu
 git clone -b main https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 # sbwml/openwrt_pkgs
-#git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
+git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
