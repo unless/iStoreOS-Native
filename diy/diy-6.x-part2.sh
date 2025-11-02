@@ -134,7 +134,7 @@ mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubu
 #clang --version
 git clone -b main https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
-git clone -b master https://github.com/sbwml/luci-app-ramfree package/luci-app-ramfree
+git clone -b main https://github.com/sbwml/luci-app-ramfree package/luci-app-ramfree
 
 # sbwml/openwrt_pkgs
 # git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
