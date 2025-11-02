@@ -108,14 +108,13 @@ rm -rf feeds/luci/applications/luci-app-filebrowser
 #fi
 
 # Git稀疏克隆，只克隆指定目录到本地
-function git_sparse_clone() {
-  branch="$1" repourl="$2" && shift 2
-  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
-  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
-  cd $repodir && git sparse-checkout set $@
-  mv -f $@ ../package/new
-  cd .. && rm -rf $repodir
-}
+# function git_sparse_clone() {
+#   branch="$1" repourl="$2" && shift 2
+#   repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
+#   cd $repodir && git sparse-checkout set $@
+#   mv -f $@ ../package/new
+#   cd .. && rm -rf $repodir
+# }
 
 # golang
 #rm -rf feeds/packages/lang/golang
@@ -135,5 +134,7 @@ mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubu
 #clang --version
 git clone -b main https://github.com/EasyTier/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
+git clone -b master https://github.com/sbwml/luci-app-ramfree package/luci-app-ramfree
+
 # sbwml/openwrt_pkgs
-git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
+# git_sparse_clone main https://github.com/sbwml/openwrt_pkgs filebrowser luci-app-filebrowser-go luci-app-ramfree
