@@ -59,6 +59,7 @@ jobs:
            sed -i 's/^CONFIG_PACKAGE_luci-app-filetransfer=y/# CONFIG_PACKAGE_luci-app-filetransfer is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-linkease=y/# CONFIG_PACKAGE_luci-app-linkease is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-app-mergerfs=y/# CONFIG_PACKAGE_luci-app-mergerfs is not set/' ./armv8/.config
+           sed -i 's/^CONFIG_PACKAGE_mergerfs=y/# CONFIG_PACKAGE_mergerfs is not set/' ./armv8/.config
            
            sed -i 's/^CONFIG_PACKAGE_luci-i18n-ddnsto-zh-cn=y/# CONFIG_PACKAGE_luci-i18n-ddnsto-zh-cn is not set/' ./armv8/.config
            sed -i 's/^CONFIG_PACKAGE_luci-i18n-filetransfer-zh-cn=y/# CONFIG_PACKAGE_luci-i18n-filetransfer-zh-cn is not set/' ./armv8/.config
