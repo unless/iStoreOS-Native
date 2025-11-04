@@ -80,6 +80,9 @@ sed -i '/^define Build\/Compile$/a\
 \t\tcp -f ../dts/rk3328/beikeyun-p1-rk3328-u-boot-rockchip.bin $(STAGING_DIR_IMAGE)/beikeyun-p1-rk3328-u-boot-rockchip.bin; \\\
 \tfi' target/linux/rockchip/image/Makefile
 # cat target/linux/rockchip/image/Makefile
+sed -i -e 's/"192\.168\.100\.1"/"192.168.111.1"/' -e "s/'192\\.168\\.100\\.1'/'192.168.111.1'/" package/istoreos-files/Makefile
+
+
 # ================================================================
 # DIY编译⬇⬇⬇
 # ================================================================
