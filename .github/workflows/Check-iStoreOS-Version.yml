@@ -15,7 +15,7 @@ jobs:
       id: version_check
       run: |
         # 获取当前版本
-        curl -s "https://fw.koolcenter.com/iStoreOS/ib/armsr/version.index" > current_version.txt
+        curl -s "https://fw0.koolcenter.com/iStoreOS/ib/armsr/version.index" > current_version.txt
         current_version=$(cat current_version.txt)
         echo "当前版本: $current_version"
         
