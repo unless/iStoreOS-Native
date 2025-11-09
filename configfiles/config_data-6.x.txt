@@ -16,24 +16,24 @@ CONFIG_TARGET_rockchip_armv8_DEVICE_beikeyun-p1=y
 # CONFIG_PACKAGE_luci-app-adguardhome is not set
 # CONFIG_PACKAGE_luci-i18n-adguardhome-zh-cn is not set
 
-# CONFIG_PACKAGE_luci-app-ramfree=y
-# CONFIG_PACKAGE_luci-i18n-ramfree-zh-cn=y
+# CONFIG_PACKAGE_luci-app-ramfree is not set
+# CONFIG_PACKAGE_luci-i18n-ramfree-zh-cn is not set
 
 # CONFIG_PACKAGE_filebrowser is not set
 # CONFIG_PACKAGE_luci-app-filebrowser-go is not set
 # CONFIG_PACKAGE_luci-i18n-filebrowser-go-zh-cn is not set
 
-CONFIG_PACKAGE_luci-app-easytier=y
-CONFIG_PACKAGE_luci-i18n-easytier-zh-cn=y
-CONFIG_PACKAGE_easytier=y
+# CONFIG_PACKAGE_luci-app-easytier is not set
+# CONFIG_PACKAGE_luci-i18n-easytier-zh-cn is not set
+# CONFIG_PACKAGE_easytier is not set
 
-CONFIG_PACKAGE_luci-app-daed=y
-CONFIG_PACKAGE_daed=y
-CONFIG_PACKAGE_luci-i18n-daed-zh-cn=y
-CONFIG_PACKAGE_libcron=y
+# CONFIG_PACKAGE_luci-app-daed is not set
+# CONFIG_PACKAGE_daed is not set
+# CONFIG_PACKAGE_luci-i18n-daed-zh-cn is not set
+# CONFIG_PACKAGE_libcron is not set
 
-CONFIG_PACKAGE_luci-app-serverchan=y
+# CONFIG_PACKAGE_luci-app-serverchan is not set
 
-CONFIG_PACKAGE_homebox=y
-CONFIG_PACKAGE_luci-app-homebox=y
-CONFIG_PACKAGE_luci-i18n-homebox-zh-cn=y
+# CONFIG_PACKAGE_homebox is not set
+# CONFIG_PACKAGE_luci-app-homebox is not set
+# CONFIG_PACKAGE_luci-i18n-homebox-zh-cn is not set
